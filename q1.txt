@@ -1,0 +1,41 @@
+--table department(parent)
+CREATE TABLE department (
+    department_id INTEGER PRIMARY KEY,
+    department_name VARCHAR2(50) NOT NULL
+);
+
+--table employee(child)
+CREATE TABLE employees (
+    emp_id VARCHAR2(30) PRIMARY KEY,
+    first_name VARCHAR2(30) NOT NULL,
+    last_name VARCHAR2(30),
+    department_id INTEGER NOT NULL,
+    reporting_to VARCHAR2(30) NOT NULL,
+    salary NUMBER CHECK (salary > 100),
+    hire_date DATE NOT NULL,
+    last_date DATE,
+    address VARCHAR2(500) NOT NULL,
+    contact_no VARCHAR2(30) UNIQUE,
+    CONSTRAINT fk_department
+        FOREIGN KEY (department_id)
+        REFERENCES department (department_id)
+);
+
+--insert data
+-- Insert data into department table
+INSERT INTO department (department_id, department_name) VALUES (10, 'Sales');
+INSERT INTO department (department_id, department_name) VALUES (20, 'Engineering');
+INSERT INTO department (department_id, department_name) VALUES (30, 'HR');
+INSERT INTO department (department_id, department_name) VALUES (40, 'Finance');
+
+-- Insert data into employees table
+INSERT INTO employees (emp_id, first_name, last_name, department_id, reporting_to, salary, hire_date, address, contact_no) 
+VALUES ('E001', 'John', 'Doe', 10, 'Manager', 5000, TO_DATE('2022-01-01', 'YYYY-MM-DD'), '123 Main St', '1234567890');
+
+-- This will fail because department_id 50 does not exist in the department table
+INSERT INTO employees (emp_id, first_name, last_name, department_id, reporting_to, salary, hire_date, address, contact_no) 
+VALUES ('E002', 'Jane', 'Smith', 50, 'Manager', 6000, TO_DATE('2022-01-02', 'YYYY-MM-DD'), '456 Elm St', '0987654321');
+
+
+--check data
+select * from employees;
