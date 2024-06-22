@@ -1,0 +1,77 @@
+create table employees
+  (
+  emp_id 	       varchar2(30)  primary key      ,
+  first_name	   varchar2(30)  not null         ,
+  last_name	  	   varchar2(30)                   , 
+  department_id    integer       not null         ,
+  reporting_to     varchar2(30)  not null         ,
+  salary		   number        check(salary>100),
+  hire_date        date          not null         ,
+  last_date        date                           ,
+  address          varchar2(500) not null         ,
+  contact_no	   varchar2(30)  unique
+  );
+
+select * from employees;
+
+CREATE OR REPLACE PROCEDURE delete_and_insert_employee (
+    p_emp_id        IN VARCHAR2,
+    p_first_name    IN VARCHAR2,
+    p_last_name     IN VARCHAR2,
+    p_department_id IN INTEGER,
+    p_reporting_to  IN VARCHAR2,
+    p_salary        IN NUMBER,
+    p_hire_date     IN DATE,
+    p_last_date     IN DATE,
+    p_address       IN VARCHAR2,
+    p_contact_no    IN VARCHAR2
+) IS
+BEGIN
+    -- Delete the employee based on emp_id
+    DELETE FROM employees
+    WHERE emp_id = p_emp_id;
+    
+    -- Insert a new employee record
+    INSERT INTO employees (
+        emp_id, 
+        first_name, 
+        last_name, 
+        department_id, 
+        reporting_to, 
+        salary, 
+        hire_date, 
+        last_date, 
+        address, 
+        contact_no
+    ) VALUES (
+        p_emp_id, 
+        p_first_name, 
+        p_last_name, 
+        p_department_id, 
+        p_reporting_to, 
+        p_salary, 
+        p_hire_date, 
+        p_last_date, 
+        p_address, 
+        p_contact_no
+    );
+END delete_and_insert_employee;
+/
+
+--run procedure
+BEGIN
+    delete_and_insert_employee(
+        'E001',            -- emp_id
+        'John',            -- first_name
+        'Doe',             -- last_name
+        10,                -- department_id
+        'Manager',         -- reporting_to
+        5000,              -- salary
+        TO_DATE('2022-01-01', 'YYYY-MM-DD'), -- hire_date
+        NULL,              -- last_date
+        '123 Main St',     -- address
+        '1234567890'       -- contact_no
+    );
+END;
+
+select * from employees;
